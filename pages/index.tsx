@@ -6,8 +6,10 @@ import axios from 'axios'
 import Footer from '../components/Footer'
 import CustomizedVennDiagram from '../components/CustomizedVennDiagram'
 import DataTable from '../components/DataTable'
+import ReactGA from 'react-ga';
 
 const Home: NextPage = () => {
+  ReactGA.pageview('/')
   const [contractAddresses, setContractAddresses] = useState('')
   // This should really be an empty list ([]), but this causes SSR vs client side differences
   // and Next.js complains
