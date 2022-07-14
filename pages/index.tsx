@@ -4,11 +4,13 @@ import { useState } from 'react'
 import styles from '../styles/Home.module.css'
 import axios from 'axios'
 import Footer from '../components/Footer'
-import Faq from '../components/Faq'
+import CustomizedVennDiagram from '../components/CustomizedVennDiagram'
 
 const Home: NextPage = () => {
   const [contractAddresses, setContractAddresses] = useState('')
-  const [vennDiagramSetData, setVennDiagramSetData] = useState([])
+  // This should really be an empty list ([]), but this causes SSR vs client side differences
+  // and Next.js complains
+  const [vennDiagramSetData, setVennDiagramSetData] = useState(null)
 
   async function processContractAddresses() {
     // Assumes that we have a string of the form 
@@ -16,14 +18,15 @@ const Home: NextPage = () => {
     // Let's clear the whitespace, and then split by commas
     const parsedContractAddresses = contractAddresses.replace(/\s+/g, '').split(',')
     // Make request to serverless func
-    const rawCollectionHolderData = await axios.get(
+    const rawCollectionHolderData = await axios.post(
       'api/holderData', 
       {
-        params: {
+        data: {
           'contractAddresses': parsedContractAddresses
         }
       }
     )
+    console.log(rawCollectionHolderData)
 
     setVennDiagramSetData(rawCollectionHolderData.data)
   }
@@ -65,6 +68,11 @@ const Home: NextPage = () => {
         <p>View the images <a href={s3BucketLink} style={{color: "blue"}}>here</a></p>
       } */}
       {/* <Faq/> */}
+      {vennDiagramSetData &&
+        <CustomizedVennDiagram
+        vennDiagramSetData={vennDiagramSetData}
+        />
+      }
       <Footer/>
 
     </main>
