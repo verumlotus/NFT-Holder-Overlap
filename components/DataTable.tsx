@@ -3,7 +3,7 @@ import { DataGrid, GridColDef} from '@mui/x-data-grid';
 
 export default function DataTable(props: {'intersectionName': string, 'dataForTable': {'id': string}[]}) {
     const columns: GridColDef[] = [
-        { field: 'id', headerName: `Owner Address: ${props.intersectionName}`, width: 500},
+        { field: 'id', headerName: `Owner Address: ${props.intersectionName}`, width: window.innerWidth * .94},
     ];
 
     return (
