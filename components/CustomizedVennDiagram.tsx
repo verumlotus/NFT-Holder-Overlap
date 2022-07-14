@@ -26,7 +26,7 @@ export default function CustomizedVennDiagram(props: any) {
     return (
         <VennDiagram
           sets={dataToUse}
-          width={780}
+          width={window.innerWidth}
           height={400}
           onClick={handleSelectionClick as any}
         //   selection={selection}
