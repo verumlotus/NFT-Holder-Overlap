@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.2",
+    "@mui/x-data-grid": "^5.13.0",
     "@upsetjs/react": "^1.11.0",
     "axios": "^0.27.2",
     "next": "12.2.2",

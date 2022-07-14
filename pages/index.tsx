@@ -5,12 +5,15 @@ import styles from '../styles/Home.module.css'
 import axios from 'axios'
 import Footer from '../components/Footer'
 import CustomizedVennDiagram from '../components/CustomizedVennDiagram'
+import DataTable from '../components/DataTable'
 
 const Home: NextPage = () => {
   const [contractAddresses, setContractAddresses] = useState('')
   // This should really be an empty list ([]), but this causes SSR vs client side differences
   // and Next.js complains
   const [vennDiagramSetData, setVennDiagramSetData] = useState(null)
+  const [dataForTable, setDataForTable] = useState(null)
+  const [intersectionName, setIntersectionName] = useState('')
 
   async function processContractAddresses() {
     // Assumes that we have a string of the form 
@@ -28,6 +31,8 @@ const Home: NextPage = () => {
     )
     console.log(rawCollectionHolderData)
 
+    // Clear any previous selection if there were any
+    setDataForTable(null)
     setVennDiagramSetData(rawCollectionHolderData.data)
   }
 
@@ -45,12 +50,12 @@ const Home: NextPage = () => {
       </h1>
 
       <p className={styles.description}>
-        Enter the contract addresses of NFT Collections on Ethereum (split by commas). A Venn Diagram showing the overlap of collection holders
-        will be rendered afterwards.
+        Enter the contract addresses of NFT Collections on Ethereum (split by commas). Click on an intersection to get all 
+        addresses at that intersection.
       </p>
 
       <input
-        placeholder={`0x123, 0xabc, etc`}
+        placeholder={`0x123, 0xabc, 0xefg`}
         value={contractAddresses}
         onChange={(e) => setContractAddresses(e.target.value)}
         style={{"width": "60vw"}}
@@ -71,6 +76,14 @@ const Home: NextPage = () => {
       {vennDiagramSetData &&
         <CustomizedVennDiagram
         vennDiagramSetData={vennDiagramSetData}
+        setDataForTable={setDataForTable}
+        setIntersectionName={setIntersectionName}
+        />
+      }
+      {dataForTable &&
+        <DataTable
+          intersectionName={intersectionName}
+          dataForTable={dataForTable}
         />
       }
       <Footer/>
