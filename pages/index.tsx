@@ -14,26 +14,32 @@ const Home: NextPage = () => {
   const [vennDiagramSetData, setVennDiagramSetData] = useState(null)
   const [dataForTable, setDataForTable] = useState(null)
   const [intersectionName, setIntersectionName] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   async function processContractAddresses() {
+    // Clear any previous selection if there were any
+    setDataForTable(null)
+    setErrorMessage('')
+
     // Assumes that we have a string of the form 
     // "0x123, 0abc,    0xsomethingElse"
     // Let's clear the whitespace, and then split by commas
     const parsedContractAddresses = contractAddresses.replace(/\s+/g, '').split(',')
     // Make request to serverless func
-    const rawCollectionHolderData = await axios.post(
-      'api/holderData', 
-      {
-        data: {
-          'contractAddresses': parsedContractAddresses
+    try {
+      const rawCollectionHolderData = await axios.post(
+        'api/holderData', 
+        {
+          data: {
+            'contractAddresses': parsedContractAddresses
+          }
         }
-      }
-    )
-    console.log(rawCollectionHolderData)
-
-    // Clear any previous selection if there were any
-    setDataForTable(null)
-    setVennDiagramSetData(rawCollectionHolderData.data)
+      )
+      setVennDiagramSetData(rawCollectionHolderData.data)
+    } catch (error) {
+        setErrorMessage('Oops! Looks like we got an error, please check that your contract addresses \
+        are correct and lives on Ethereum!')
+    }
   }
 
   return (
@@ -50,8 +56,8 @@ const Home: NextPage = () => {
       </h1>
 
       <p className={styles.description}>
-        Enter the contract addresses of NFT Collections on Ethereum (split by commas). Click on an intersection to get all 
-        addresses at that intersection.
+        Enter the contract addresses of NFT Collections on Ethereum (split by commas). Click on an intersection 
+        inside the Venn Diagram to get all addresses at that intersection.
       </p>
 
       <input
@@ -73,6 +79,9 @@ const Home: NextPage = () => {
         <p>View the images <a href={s3BucketLink} style={{color: "blue"}}>here</a></p>
       } */}
       {/* <Faq/> */}
+      {errorMessage &&
+        <p>{errorMessage}</p>
+      }
       {vennDiagramSetData &&
         <CustomizedVennDiagram
         vennDiagramSetData={vennDiagramSetData}

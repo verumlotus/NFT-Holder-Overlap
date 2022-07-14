@@ -14,14 +14,12 @@ export default function CustomizedVennDiagram(props: any) {
     function handleSelectionClick(set: SetData) {
         const tableData: {'id': string}[] = []
         set.elems.forEach((v) => tableData.push({id: v}))
-        console.log(tableData)
         setIntersectionName(set.name)
         setDataForTable(tableData)
     }
 
     const dataToUse = useMemo(() => {
         const colors = ['#f47560', '#61cdbb', '#75975e', '#f1e15b', '#e8a838', '#97e3d5'];
-        console.log(asSets(vennDiagramSetData).map((s, i) => ({ ...s, color: colors[i % colors.length] })))
         return asSets(vennDiagramSetData).map((s, i) => ({ ...s, color: colors[i % colors.length] }));
     }, [vennDiagramSetData])
 
