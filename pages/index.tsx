@@ -20,6 +20,7 @@ const Home: NextPage = () => {
     // Clear any previous selection if there were any
     setDataForTable(null)
     setErrorMessage('')
+    setVennDiagramSetData(null)
 
     // Assumes that we have a string of the form 
     // "0x123, 0abc,    0xsomethingElse"
