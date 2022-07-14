@@ -10,7 +10,7 @@ type SetData = {
 
 export default async function getNftHolderData(req: NextApiRequest, res: NextApiResponse<SetData[]>) {
     // The request should contain a list of contract addresses corresponding to NFT collections
-    const {contractAddresses = []} = req.query
+    const {contractAddresses = []} = req.body
 
     // Now for every contract address, let's query alchemy for the owners of this nft collection
     const ownerCollectionBaseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${ALCHEMY_API_KEY}/getOwnersForCollection`;
@@ -25,7 +25,7 @@ export default async function getNftHolderData(req: NextApiRequest, res: NextApi
 
         result.push({
             'name': rawContractMetadataRes.data['contractMetadata']['symbol'],
-            'elems': rawOwnerCollectionRes.data['owners']
+            'elems': rawOwnerCollectionRes.data['ownerAddresses']
         })
     }
 
